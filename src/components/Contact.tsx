@@ -5,6 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
+import InteractiveMap from './InteractiveMap';
 import { 
   MapPin, 
   Phone, 
@@ -20,6 +22,7 @@ import {
 
 const Contact = () => {
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -41,8 +44,8 @@ const Contact = () => {
     // Basic validation
     if (!formData.name || !formData.email || !formData.message) {
       toast({
-        title: "Required fields missing",
-        description: "Please fill in all required fields.",
+        title: t('contact.required'),
+        description: t('contact.requiredDesc'),
         variant: "destructive"
       });
       return;
@@ -50,8 +53,8 @@ const Contact = () => {
 
     // Simulate form submission
     toast({
-      title: "Message sent successfully!",
-      description: "Thank you for your message. We'll get back to you soon.",
+      title: t('contact.success'),
+      description: t('contact.successDesc'),
     });
 
     // Reset form
@@ -66,25 +69,25 @@ const Contact = () => {
   const contactInfo = [
     {
       icon: MapPin,
-      title: 'Address',
+      title: t('contact.address'),
       content: '123 Media Center Drive\nSuite 400\nNew York, NY 10001',
       color: 'text-blue-600'
     },
     {
       icon: Phone,
-      title: 'Phone',
+      title: t('contact.phone'),
       content: '+1 (555) 123-4567\n+1 (555) 123-4568',
       color: 'text-green-600'
     },
     {
       icon: Mail,
-      title: 'Email',
+      title: t('contact.email'),
       content: 'info@mediacenter.com\nsupport@mediacenter.com',
       color: 'text-purple-600'
     },
     {
       icon: Clock,
-      title: 'Hours',
+      title: t('contact.hours'),
       content: 'Mon - Fri: 9:00 AM - 6:00 PM\nSat - Sun: 10:00 AM - 4:00 PM',
       color: 'text-orange-600'
     }
@@ -104,11 +107,10 @@ const Contact = () => {
         {/* Header */}
         <div className="text-center mb-16 fade-in">
           <h2 className="text-4xl md:text-5xl font-bold text-gradient mb-6">
-            Get in Touch
+            {t('contact.title')}
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Ready to start your media journey? Have questions about our programs? 
-            We'd love to hear from you and help you achieve your goals.
+            {t('contact.subtitle')}
           </p>
         </div>
 
@@ -214,21 +216,8 @@ const Contact = () => {
             {/* Map Placeholder */}
             <Card className="card-elevated overflow-hidden">
               <CardContent className="p-0">
-                <div className="h-64 bg-gradient-to-br from-primary/10 to-accent/10 relative">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center">
-                      <MapPin className="w-12 h-12 text-primary mx-auto mb-4" />
-                      <h3 className="text-xl font-semibold text-foreground mb-2">
-                        Visit Our Campus
-                      </h3>
-                      <p className="text-muted-foreground">
-                        Interactive map integration coming soon
-                      </p>
-                      <Button variant="outline" className="mt-4">
-                        Get Directions
-                      </Button>
-                    </div>
-                  </div>
+                <div className="h-64">
+                  <InteractiveMap />
                 </div>
               </CardContent>
             </Card>

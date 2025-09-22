@@ -1,8 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { Play, ArrowDown } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import heroImage from '@/assets/hero-media-center.jpg';
 
 const Hero = () => {
+  const { t } = useLanguage();
+
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
@@ -19,26 +22,25 @@ const Hero = () => {
       <div className="relative z-10 container mx-auto px-4 lg:px-8 text-center">
         <div className="max-w-4xl mx-auto fade-in">
           <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground mb-6 leading-tight">
-            Welcome to Our
-            <span className="block text-accent-glow">Media Center</span>
+            {t('hero.title')}
+            <span className="block text-accent-glow">{t('hero.titleAccent')}</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Discover quality education, inspiring content, and live broadcasting 
-            that connects communities around the world.
+            {t('hero.subtitle')}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             <Button className="btn-hero text-lg px-8 py-4">
               <Play className="w-5 h-5 mr-2" />
-              Watch Live Stream
+              {t('hero.watchLive')}
             </Button>
             <Button 
               variant="outline" 
               size="lg"
               className="bg-primary-foreground/10 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/20 backdrop-blur-sm"
             >
-              Explore Content
+              {t('hero.explore')}
             </Button>
           </div>
 
@@ -46,15 +48,15 @@ const Hero = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-2xl mx-auto">
             <div className="text-center">
               <div className="text-3xl md:text-4xl font-bold text-primary-foreground mb-2">50+</div>
-              <div className="text-primary-foreground/80">Expert Teachers</div>
+              <div className="text-primary-foreground/80">{t('hero.teachers')}</div>
             </div>
             <div className="text-center">
               <div className="text-3xl md:text-4xl font-bold text-primary-foreground mb-2">24/7</div>
-              <div className="text-primary-foreground/80">Live Streaming</div>
+              <div className="text-primary-foreground/80">{t('hero.streaming')}</div>
             </div>
             <div className="text-center">
               <div className="text-3xl md:text-4xl font-bold text-primary-foreground mb-2">3</div>
-              <div className="text-primary-foreground/80">Languages</div>
+              <div className="text-primary-foreground/80">{t('hero.languages')}</div>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X, Globe, Play } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,22 +11,24 @@ import {
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [currentLang, setCurrentLang] = useState('EN');
+  const { language, setLanguage, t } = useLanguage();
 
   const languages = [
-    { code: 'EN', name: 'English' },
-    { code: 'RU', name: 'Русский' },
-    { code: 'AM', name: 'Հայերեն' },
+    { code: 'en', name: 'English', display: 'EN' },
+    { code: 'ru', name: 'Русский', display: 'RU' },
+    { code: 'am', name: 'Հայերեն', display: 'AM' },
   ];
 
   const menuItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'Teachers', href: '#teachers' },
-    { name: 'Education', href: '#education' },
-    { name: 'News', href: '#news' },
-    { name: 'Gallery', href: '#gallery' },
-    { name: 'Contact', href: '#contact' },
+    { name: t('nav.home'), href: '#home' },
+    { name: t('nav.teachers'), href: '#teachers' },
+    { name: t('nav.education'), href: '#education' },
+    { name: t('nav.news'), href: '#news' },
+    { name: t('nav.gallery'), href: '#gallery' },
+    { name: t('nav.contact'), href: '#contact' },
   ];
+
+  const currentLangDisplay = languages.find(lang => lang.code === language)?.display || 'EN';
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-lg border-b border-border/50">
@@ -59,15 +62,15 @@ const Header = () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="flex items-center space-x-1">
                   <Globe className="w-4 h-4" />
-                  <span>{currentLang}</span>
+                  <span>{currentLangDisplay}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 {languages.map((lang) => (
                   <DropdownMenuItem
                     key={lang.code}
-                    onClick={() => setCurrentLang(lang.code)}
-                    className={currentLang === lang.code ? 'bg-accent' : ''}
+                    onClick={() => setLanguage(lang.code as 'en' | 'ru' | 'am')}
+                    className={language === lang.code ? 'bg-accent' : ''}
                   >
                     {lang.name}
                   </DropdownMenuItem>
@@ -78,7 +81,7 @@ const Header = () => {
             {/* Live Stream Button */}
             <Button className="btn-live">
               <Play className="w-4 h-4 mr-2" />
-              Watch Live
+              {t('header.watchLive')}
             </Button>
           </div>
 
@@ -113,15 +116,15 @@ const Header = () => {
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="sm" className="flex items-center space-x-1">
                         <Globe className="w-4 h-4" />
-                        <span>{currentLang}</span>
+                        <span>{currentLangDisplay}</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                       {languages.map((lang) => (
                         <DropdownMenuItem
                           key={lang.code}
-                          onClick={() => setCurrentLang(lang.code)}
-                          className={currentLang === lang.code ? 'bg-accent' : ''}
+                          onClick={() => setLanguage(lang.code as 'en' | 'ru' | 'am')}
+                          className={language === lang.code ? 'bg-accent' : ''}
                         >
                           {lang.name}
                         </DropdownMenuItem>
@@ -130,7 +133,7 @@ const Header = () => {
                   </DropdownMenu>
                   <Button className="btn-live">
                     <Play className="w-4 h-4 mr-2" />
-                    Watch Live
+                    {t('header.watchLive')}
                   </Button>
                 </div>
               </div>
