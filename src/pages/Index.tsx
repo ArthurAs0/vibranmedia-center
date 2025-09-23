@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
+import AboutHistory from "@/components/AboutHistory";
 import Teachers from "@/components/Teachers";
 import Education from "@/components/Education";
 import News from "@/components/News";
@@ -18,6 +19,9 @@ const Index = () => {
         <Hero />
         <div className="content-block">
           <About />
+        </div>
+        <div className="content-block">
+          <AboutHistory />
         </div>
         <div className="content-block">
           <Teachers />
@@ -43,7 +47,7 @@ const Index = () => {
       {/* Floating Chatbot Widget */}
       <FloatingChatbot 
         triggerAfterBlocks={2} 
-        totalBlocks={7} 
+        totalBlocks={8} 
       />
     </div>
   );
