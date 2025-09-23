@@ -6,6 +6,7 @@ import News from "@/components/News";
 import Gallery from "@/components/Gallery";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import FloatingChatbot from "@/components/FloatingChatbot";
 
 const Index = () => {
   return (
@@ -13,13 +14,29 @@ const Index = () => {
       <Header />
       <main>
         <Hero />
-        <Teachers />
-        <Education />
-        <News />
-        <Gallery />
-        <Contact />
+        <div className="content-block">
+          <Teachers />
+        </div>
+        <div className="content-block">
+          <Education />
+        </div>
+        <div className="content-block">
+          <News />
+        </div>
+        <div className="content-block">
+          <Gallery />
+        </div>
+        <div className="content-block">
+          <Contact />
+        </div>
       </main>
       <Footer />
+      
+      {/* Floating Chatbot Widget */}
+      <FloatingChatbot 
+        triggerAfterBlocks={2} 
+        totalBlocks={6} 
+      />
     </div>
   );
 };
