@@ -19,10 +19,12 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ triggerAfterBlocks, t
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState<FormData>({ name: '', phone: '' });
-  const [currentTrigger, setCurrentTrigger] = useState(0);
+  const [hasTriggered, setHasTriggered] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
+      if (hasTriggered) return; // Don't trigger again if already shown
+      
       const contentBlocks = document.querySelectorAll('.content-block');
       const scrollPosition = window.scrollY + window.innerHeight;
       
@@ -34,12 +36,10 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ triggerAfterBlocks, t
         }
       });
 
-      const triggerPoint = Math.floor(visibleBlocks / 2);
-      if (triggerPoint > currentTrigger && triggerPoint * 2 <= totalBlocks) {
-        setCurrentTrigger(triggerPoint);
+      // Show chatbot after seeing 2 blocks
+      if (visibleBlocks >= triggerAfterBlocks && !hasTriggered) {
+        setHasTriggered(true);
         setIsVisible(true);
-        setIsSubmitted(false);
-        setIsExpanded(false);
       }
     };
 
@@ -47,7 +47,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ triggerAfterBlocks, t
     handleScroll(); // Check initial state
     
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [triggerAfterBlocks, totalBlocks, currentTrigger]);
+  }, [triggerAfterBlocks, hasTriggered]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
