@@ -19,16 +19,10 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ triggerAfterBlocks, t
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState<FormData>({ name: '', phone: '' });
-  const [hasTriggered, setHasTriggered] = useState(false);
+  const [lastTriggerBlock, setLastTriggerBlock] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Don't trigger again if already shown or if user suppressed it
-      const suppressed =
-        localStorage.getItem('chatbot_submitted') === 'true' ||
-        localStorage.getItem('chatbot_dismissed') === 'true';
-      if (hasTriggered || suppressed) return;
-      
       const contentBlocks = document.querySelectorAll('.content-block');
       const scrollPosition = window.scrollY + window.innerHeight;
       
@@ -40,10 +34,13 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ triggerAfterBlocks, t
         }
       });
 
-      // Show chatbot after seeing 2 blocks
-      if (visibleBlocks >= triggerAfterBlocks && !hasTriggered) {
-        setHasTriggered(true);
+      // Show chatbot every 2 blocks if not currently visible
+      const currentTriggerBlock = Math.floor(visibleBlocks / triggerAfterBlocks);
+      if (currentTriggerBlock > lastTriggerBlock && !isVisible) {
+        setLastTriggerBlock(currentTriggerBlock);
         setIsVisible(true);
+        setIsSubmitted(false);
+        setIsExpanded(false);
       }
     };
 
@@ -51,18 +48,8 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ triggerAfterBlocks, t
     handleScroll(); // Check initial state
     
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [triggerAfterBlocks, hasTriggered]);
+  }, [triggerAfterBlocks, lastTriggerBlock, isVisible]);
 
-  // On mount, if user previously submitted/dismissed, never trigger
-  useEffect(() => {
-    const suppressed =
-      localStorage.getItem('chatbot_submitted') === 'true' ||
-      localStorage.getItem('chatbot_dismissed') === 'true';
-    if (suppressed) {
-      setHasTriggered(true);
-      setIsVisible(false);
-    }
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,39 +66,29 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ triggerAfterBlocks, t
         body: JSON.stringify(formData),
       });
 
-      // Persist that user has submitted so widget won't reappear
-      localStorage.setItem('chatbot_submitted', 'true');
-      setHasTriggered(true);
-
       setIsExpanded(false);
       setIsSubmitted(true);
       setFormData({ name: '', phone: '' });
       
-      // Hide the thank you message after 5 seconds
+      // Hide the thank you message after 3 seconds
       setTimeout(() => {
         setIsVisible(false);
-      }, 5000);
+      }, 3000);
       
     } catch (error) {
       console.error('Error submitting form:', error);
       // For demo purposes, still show success
-      localStorage.setItem('chatbot_submitted', 'true');
-      setHasTriggered(true);
-
       setIsExpanded(false);
       setIsSubmitted(true);
       setFormData({ name: '', phone: '' });
       
       setTimeout(() => {
         setIsVisible(false);
-      }, 5000);
+      }, 3000);
     }
   };
 
   const handleClose = () => {
-    // Persist dismissal so it will not reappear this session
-    localStorage.setItem('chatbot_dismissed', 'true');
-    setHasTriggered(true);
     setIsVisible(false);
     setIsExpanded(false);
     setIsSubmitted(false);
@@ -121,12 +98,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ triggerAfterBlocks, t
     setIsExpanded(false);
   };
 
-  const suppressed =
-    typeof window !== 'undefined' && (
-      localStorage.getItem('chatbot_submitted') === 'true' ||
-      localStorage.getItem('chatbot_dismissed') === 'true'
-    );
-  if (!isVisible || (suppressed && !isSubmitted)) return null;
+  if (!isVisible) return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
