@@ -57,26 +57,26 @@ const Header = () => {
 
           {/* Right Section */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* Language Switcher */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="flex items-center space-x-1">
-                  <Globe className="w-4 h-4" />
-                  <span>{currentLangDisplay}</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
+            {/* Language Switcher - Segmented */}
+            <div role="tablist" aria-label="Language selector" className="flex items-center">
+              <div className="bg-muted rounded-full p-1 flex">
                 {languages.map((lang) => (
-                  <DropdownMenuItem
+                  <button
                     key={lang.code}
+                    role="tab"
+                    aria-selected={language === lang.code}
                     onClick={() => setLanguage(lang.code as 'en' | 'ru' | 'am')}
-                    className={language === lang.code ? 'bg-accent' : ''}
+                    className={
+                      `px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                        language === lang.code ? 'bg-primary text-primary-foreground shadow' : 'text-muted-foreground hover:bg-accent'
+                      }`
+                    }
                   >
-                    {lang.name}
-                  </DropdownMenuItem>
+                    {lang.display}
+                  </button>
                 ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </div>
+            </div>
 
             {/* Live Stream Button */}
             <Button className="btn-live">
@@ -112,25 +112,25 @@ const Header = () => {
               ))}
               <div className="px-4 pt-2 border-t border-border/50 mt-4">
                 <div className="flex items-center justify-between">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="flex items-center space-x-1">
-                        <Globe className="w-4 h-4" />
-                        <span>{currentLangDisplay}</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
+                  <div role="tablist" aria-label="Language selector" className="flex items-center">
+                    <div className="bg-muted rounded-full p-1 flex">
                       {languages.map((lang) => (
-                        <DropdownMenuItem
+                        <button
                           key={lang.code}
+                          role="tab"
+                          aria-selected={language === lang.code}
                           onClick={() => setLanguage(lang.code as 'en' | 'ru' | 'am')}
-                          className={language === lang.code ? 'bg-accent' : ''}
+                          className={
+                            `px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                              language === lang.code ? 'bg-primary text-primary-foreground shadow' : 'text-muted-foreground hover:bg-accent'
+                            }`
+                          }
                         >
-                          {lang.name}
-                        </DropdownMenuItem>
+                          {lang.display}
+                        </button>
                       ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                    </div>
+                  </div>
                   <Button className="btn-live">
                     <Play className="w-4 h-4 mr-2" />
                     {t('header.watchLive')}
