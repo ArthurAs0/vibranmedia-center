@@ -5,6 +5,7 @@ import Teachers from "@/components/Teachers";
 import Education from "@/components/Education";
 import News from "@/components/News";
 import Gallery from "@/components/Gallery";
+import Location from "@/components/Location";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import FloatingChatbot from "@/components/FloatingChatbot";
@@ -31,6 +32,9 @@ const Index = () => {
           <Gallery />
         </div>
         <div className="content-block">
+          <Location />
+        </div>
+        <div className="content-block">
           <Contact />
         </div>
       </main>
@@ -39,7 +43,7 @@ const Index = () => {
       {/* Floating Chatbot Widget */}
       <FloatingChatbot 
         triggerAfterBlocks={2} 
-        totalBlocks={6} 
+        totalBlocks={7} 
       />
     </div>
   );
